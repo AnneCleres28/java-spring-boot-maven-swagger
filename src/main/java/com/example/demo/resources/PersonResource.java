@@ -1,5 +1,7 @@
 package com.example.demo.resources;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,6 +14,7 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
+@Api
 @RestController
 @RequestMapping(path="/persons")
 public class PersonResource {
@@ -23,19 +26,21 @@ public class PersonResource {
         this.personRepository = personRepository;
     }
 
+    @ApiOperation("Cadastrar pessoas, uma por vez.")
     @PostMapping
     public ResponseEntity<Person> save(@RequestBody Person person) {
         personRepository.save(person);
         return new ResponseEntity<>(person, HttpStatus.OK);
     }
 
+    @ApiOperation("Consultar pessoas, retornando todas em uma lista.")
     @GetMapping
     public ResponseEntity<List<Person>> getAll(){
         List<Person> persons = new ArrayList<>();
         persons = personRepository.findAll();
         return new ResponseEntity<>(persons, HttpStatus.OK);
     }
-
+    @ApiOperation("Consultar pessoa pelo id.")
     @GetMapping(path="/{id}")
     public ResponseEntity<Optional<Person>> getById(@PathVariable Integer id) {
         Optional<Person> person;
